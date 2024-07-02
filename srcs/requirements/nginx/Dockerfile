@@ -1,16 +1,18 @@
 FROM debian:bullseye
 
-RUN apt update -y && apt upgrade -y && apt-get upgrade -y && apt install nginx -y
+RUN  apt-get update && apt-get install -y nginx openssl curl
 
-RUN apt-get install -y openssl && mkdir -p /etc/nginx/certs\
-    && openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/nginx/certs/selfsigned.key\
-    -out /etc/nginx/certs/selfsigned.crt\
-    -subj "/C=DE/ST=Baden-Wuerttemberg/L=Heilbronn/O=42Heilbronn/CN=obrittne"
+RUN mkdir -p /etc/nginx/ssl \
+	&& openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+	-keyout /etc/nginx/ssl/server.key\
+	-out    /etc/nginx/ssl/server.crt\
+	-subj "/C=DE/ST=Baden-Wuerttemberg/L=Heilbronn/O=42Heilbronn/CN=qdo" 
+# rm -rf /var/lib/apt/lists/*
 
-
-COPY tools/default /etc/nginx/sites-enabled/default
+# openssl x509 -in /etc/nginx/ssl/server.crt  -text -noout -to see subj
 
 EXPOSE 443
 
-CMD ["/bin/bash"]
+COPY tools/default.conf /etc/nginx/sites-enabled/default
+
+CMD ["nginx", "-g", "daemon off;"]
