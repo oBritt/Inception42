@@ -28,9 +28,12 @@ services:
     build: ./requirements/wordpress/.
     container_name: wordpress
     image: wordpress
-    volumes: volume_wp:/var/www/html
-    networks: inception
-    env_file: .env
+    volumes:
+      - volume_wp:/var/www/html
+    networks:
+      - inception
+    env_file:
+      - .env
     environment:
       WORDPRESS_U: ${WORDPRESS_U}
       WORDPRESS_U_PASSWORD: ${WORDPRESS_U_PASSWORD}
@@ -65,12 +68,12 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /home/obrittne/data/wordpress_volume1
+      device: /home/${USER}/data/wordpress_volume1
 
   volume_db:
     driver_opts:
       o: bind
       type: none
-      device: /home/obrittne/data/mariadb_volume1
+      device: /home/${USER}/data/mariadb_volume1
 
 
