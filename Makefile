@@ -1,13 +1,18 @@
 
-NAME = ./srcs/docker-compose.yml
 
-all:
-	mkdir -p /home/obrittne/data/wordpress_volume1
-	mkdir -p /home/obrittne/data/mariadb_volume1
-	docker-compose -f $(NAME) up -d
+all : up
 
+up : 
+	@docker-compose -f ./srcs/docker-compose.yml up -d
 
-down:
-	docker-compose -f $(NAME) down -y
+down : 
+	@docker-compose -f ./srcs/docker-compose.yml down
 
-re: down build
+stop : 
+	@docker-compose -f ./srcs/docker-compose.yml stop
+
+start : 
+	@docker-compose -f ./srcs/docker-compose.yml start
+
+status : 
+	@docker ps

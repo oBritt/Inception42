@@ -1,17 +1,30 @@
-FROM debian:bullseye
+#!/bin/sh
 
-RUN mkdir -p /run/mysqld && chmod 777 /run/mysqld \
-    && mkdir -p /var/lib/mysql && chmod 777 /var/lib/mysql
+if [ ! -f /var/lib/mysql/.mysql_secure_installed ]; then
+service mariadb start
+sleep 5
 
-RUN apt-get update && apt-get upgrade -y \
-	&& apt-get install mariadb-server -y
+echo "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\` ;" > script.sql
+echo "CREATE USER IF NOT EXISTS '${WORDPRESS_U}'@'%' IDENTIFIED BY '${WORDPRESS_U_PASSWORD}';" >> script.sql
+echo "GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${WORDPRESS_U}'@'%';" >> script.sql
+# echo "ALTER USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';" >> script.sql
+echo "FLUSH PRIVILEGES;" >> script.sql
 
-RUN chown mysql:mysql /var/lib/mysql
+mysql < script.sql
 
-COPY ./50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-COPY ./init_mariadb.sh /
-RUN chmod +x /init_mariadb.sh
+	mysql_secure_installation << LIMITER
+	$MYSQL_ROOT_PASSWORD
+	n
+	n
+	y
+	y
+	y
+	y
+LIMITER
+    touch /var/lib/mysql/.exist
+service mariadb stop
+sleep 5	
+fi
 
-EXPOSE 3306
-
-CMD ["/init_mariadb.sh"]
+exec mariadbd --user=mysql
+# exec mariadbd --user=mysql --bootstrap
