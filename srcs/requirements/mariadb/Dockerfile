@@ -9,7 +9,7 @@ RUN apt-get update && apt-get upgrade -y \
 RUN chown mysql:mysql /var/lib/mysql
 
 COPY ./tools/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-COPY ./init_mariadb.sh /
+COPY ./tools/init_mariadb.sh /
 RUN chmod +x /tools/init_mariadb.sh
 
 EXPOSE 3306
