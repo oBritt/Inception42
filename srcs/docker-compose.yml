@@ -6,7 +6,7 @@ services:
     container_name: mariadb
     image: mariadb
     volumes:
-      - volume_db :/var/lib/mysql
+      - volume_db:/var/lib/mysql
     env_file:
       - .env
     environment:
