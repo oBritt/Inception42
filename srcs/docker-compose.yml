@@ -72,12 +72,12 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /home/obrittne/data/wordpress_volume1
+      device: ~/home/obrittne/data/wordpress_volume1
 
   volume_db:
     driver_opts:
       o: bind
       type: none
-      device: /home/obrittne/data/mariadb_volume1
+      device: ~/home/obrittne/data/mariadb_volume1
 
 
