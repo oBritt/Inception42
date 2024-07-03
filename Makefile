@@ -2,8 +2,8 @@
 NAME = ./srcs/docker-compose.yml
 
 all:
-	mkdir -p /home/oleksandr/data/wordpress_volume1
-	mkdir -p /home/oleksandr/data/mariadb_volume1
+	mkdir -p /home/obrittne/data/wordpress_volume1
+	mkdir -p /home/obrittne/data/mariadb_volume1
 	@docker-compose -f $(NAME) up -d
 
 down:
