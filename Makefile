@@ -35,6 +35,9 @@ fclean:
 	@printf "Complete clearning of all docker configuration ... \n"
 	@docker stop $$(docker ps -qa);\
 	docker system prune -a ;\
+	rm -rf /home/obrittne/data/mariadb_volume1/* ;\
+	rm -rf /home/obrittne/data/mariadb_volume1/.exist;\
+	rm -rf /home/obrittne/data/wordpress_volume1/* ;\
 	docker system prune --all --force --volumes;\
 	docker network prune --force;\
 	docker volume rm srcs_volume_wp;\
